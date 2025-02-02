@@ -14,15 +14,23 @@ class App {
         $query = "select * from task";
         $stmt = $this->db->query($query);
         while($row = mysqli_fetch_array($stmt)):
-            if($row['status'] == 0){
-                $this->status = "Belum Selesai";
-            }else{
-                $this->status = "selesai";
-            }
+            $status = ($row['status'] == 0)? $this->status = "belum Selesai" : $this->status = "selesai";
+            $check = ($row['status'] == 0)? $this->status = "" : $this->status = "checked";
 
-            echo "<li>" . $row['task'] . "<p>" . $row['created'] . "</p><p>";
-            echo "<a href='delete.php?id=". $row['id']."'><button type='submit'>Delete</button></a>";
-            echo "<a href='status.php?id=". $row['id']."&status=". $row['status'] ."'><button type='submit'>$this->status</button></a>";
+            echo "<tr>";
+            echo "<td>".$row['task']."</td>";
+            echo "<td>".$row['created']."</td>";
+            echo "<td><a href='delete.php?id=". $row['id']."'><button type='submit'>Delete</button></a></td>";
+            
+            //checkbox
+            echo "<td>";
+            echo "<form method='post' action='status.php?id=".$row['id']."' id='checkbox'>";
+            echo "<input type='text' name='id' value='".$row['id']."' hidden>";
+            echo "<input type='text' name='status' value='".$row['status']."' hidden>";
+            echo "<input id='status' type='checkbox' onchange='this.form.submit()' $check>";
+            echo "<label for='status' id='stats'>$status</label>";
+            echo "</form>";
+            echo "</tr>";
         endwhile;
     }
 
@@ -41,8 +49,8 @@ class App {
     }
 
     public function changeStatus($id, $status){
-        $this->id = $_GET['id'];
-        $this->status = $_GET['status'];
+        $this->id = $_POST['id'];
+        $this->status = $_POST['status'];
 
         if($this->status == 1){
             $NewStatus = $this->status - 1;
@@ -52,6 +60,6 @@ class App {
 
         $query = "update task set status = '$NewStatus' where id = '$this->id'";
         $pdo = mysqli_query($this->db, $query);
-        header('Location: index.php');
+        header("Location: index.php");
     }
 }
