@@ -77,7 +77,7 @@ git pull https://github.com/kamiiyaru/tdl.git
 - Line mark  
   The line used to mark finished tasks on the to-do list is now deleted for better readability of tasks.
 
-  **v1.3.1**
-  **Changes**
+**v1.3.1**
+**Changes**
 - Optimize the code writation on *app/app.php*
 - Add another header for the edit page, So now it won't be hard for user to differentiate the edit page from the home page. 
